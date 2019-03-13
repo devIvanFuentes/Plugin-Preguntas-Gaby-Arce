@@ -69,4 +69,55 @@
 	}
 	
 	add_action( 'init', 'preguntas_register_name' );
+
+
+	/**
+	 * Create a taxonomy
+	 *
+	 * @uses  Inserts new taxonomy object into the list
+	 * @uses  Adds query vars
+	 *
+	 * @param string  Name of taxonomy object
+	 * @param array|string  Name of the object type for the taxonomy object.
+	 * @param array|string  Taxonomy arguments
+	 * @return null|WP_Error WP_Error if errors, otherwise null.
+	 */
+	function taxonomia_preguntas() {
+	
+		$labels = array(
+			'name'                  => _x( 'Categorias Pregunta', 'Taxonomy Categorias', 'ga-preguntas' ),
+			'singular_name'         => _x( 'Categoria Pregunta', 'Taxonomy Categoria', 'ga-preguntas' ),
+			'search_items'          => __( 'Buscar Categorias', 'ga-preguntas' ),
+			'popular_items'         => __( 'Categorias de preguntas Populares', 'ga-preguntas' ),
+			'all_items'             => __( 'Todas las Categorias', 'ga-preguntas' ),
+			'parent_item'           => __( 'Categoria padre', 'ga-preguntas' ),
+			'parent_item_colon'     => __( 'Categoria padre', 'ga-preguntas' ),
+			'edit_item'             => __( 'Editar Categoria', 'ga-preguntas' ),
+			'update_item'           => __( 'Actualizar Categoria', 'ga-preguntas' ),
+			'add_new_item'          => __( 'Añadir nueva Categoria', 'ga-preguntas' ),
+			'new_item_name'         => __( 'Nuevo nombre de Categoria', 'ga-preguntas' ),
+			'add_or_remove_items'   => __( 'Añadir o eliminar Categorias', 'ga-preguntas' ),
+			'choose_from_most_used' => __( 'Elige entre las Categorias más usadas', 'ga-preguntas' ),
+			'menu_name'             => __( 'Categoria', 'ga-preguntas' ),
+		);
+	
+		$args = array(
+			'labels'            => $labels,
+			'public'            => true,
+			'show_in_nav_menus' => true,
+			'show_admin_column' => true,
+			'hierarchical'      => true,
+			'show_tagcloud'     => true,
+			'show_ui'           => true,
+			'query_var'         => true,
+			'rewrite'           => array('slug' => 'categoria-preguntas'),
+			'query_var'         => true,
+			'capabilities'      => array(),
+		);
+	
+		register_taxonomy( 'categoria-preguntas', array('preguntas'), $args );
+	}
+	
+	add_action( 'init', 'taxonomia_preguntas' );
+
 	
