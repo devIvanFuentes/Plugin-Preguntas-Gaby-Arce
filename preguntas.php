@@ -120,4 +120,67 @@
 	
 	add_action( 'init', 'taxonomia_preguntas' );
 
+
+// Añadiendo metaboxes
+
+	function ga_preguntas_gaby(){
+		add_meta_box( 'ga-metabox-preguntas', 'Datos de la pregunta', 'ga_diseno_preguntas', 'preguntas', 'normal', 'high', null );
+	}
+
+	add_action( 'add_meta_boxes', 'ga_preguntas_gaby' );
+
+	function ga_guardar_pregunta($post_id,$post,$update){
+		if (!isset($_POST['meta-box-nonce']) || !wp_verify_nonce( $_POST['meta-box-nonce'], basename(__FILE__) ) )
+			return $post_id;
+		
+		if(!current_user_can('edit_post', $post_id))
+			return $post_id;
+
+		if(defined("DOING_AUTOSAVE") && DOING_AUTOSAVE)
+			return $post_id;
+
+		$nombre = "";
+		$apellidos = "";
+		$likes = "";
+
+		if(isset($_POST['nombre'])):
+			$nombre = $_POST['nombre'];
+		endif;
+
+		update_post_meta($post_id, 'nombre', $nombre);
+
+		if(isset($_POST['apellidos'])):
+			$apellidos = $_POST['apellidos'];
+		endif;
+
+		update_post_meta($post_id, 'apellidos', $apellidos);
+
+		if(isset($_POST['likes'])):
+			$likes = $_POST['likes'];
+		endif;
+
+		update_post_meta($post_id, 'likes', $likes);
+	}
+
+	add_action('save_post','ga_guardar_pregunta',10,3);
+
+	function ga_diseno_preguntas($post){
+		wp_nonce_field( basename(__FILE__), "meta-box-nonce" );
+		?>
+		<div>
+			<label for="nombre">Nombre</label>
+			<input name="nombre" type="text" style="width: 100%;" value="<?php echo get_post_meta( $post->ID, 'nombre', true ) ?>">
+			<br>
+
+			<label for="apellidos">Apellidos</label>
+			<input name="apellidos" type="text" style="width: 100%;" value="<?php echo get_post_meta( $post->ID, 'apellidos', true ) ?>">
+			<br>
+
+			<label for="likes">Likes</label>
+			<br>
+			<input name="likes" type="number" min="0" value="<?php echo get_post_meta( $post->ID, 'likes', true ) ?>">	
+		</div>
+
+		<?php
+	}
 	
